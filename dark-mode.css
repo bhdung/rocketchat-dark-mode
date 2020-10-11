@@ -5,6 +5,7 @@
 :root {
 	--primary-font-color: #444;
 	--info-font-color: #a0a0a0;
+	--color-darker: #272c33;
 }
 
 /* Reset global font color so that it's changable more easily */
@@ -16,7 +17,7 @@
 	color: var(--info-font-color);
 }
 
-select {
+input, select, textarea {
 	color: var(--input-text-color);
 }
 
@@ -38,15 +39,22 @@ select {
 	}
 }
 
-
+@keyframes highlight {
+	from {
+		background-color: hsl(216, 92%, 54%);
+	}
+}
 
 /******************************************
  ************Transition Effect*************
  ******************************************/
+input,
 textarea,
 select,
 .color-primary-font-color,
 .color-info-font-color,
+.background-info-font-color,
+.background-transparent-darker-before::before,
 .messages-box .message .body, /* override for opacity transition */
 .rc-header__name,
 .rc-header__wrap,
@@ -88,23 +96,78 @@ select,
  *************Dark Mode Settings***********
  ******************************************/
 body.dark-mode {
-	--header-background-color: var(--color-darkest);
-	--header-title-username-color-darker: var(--color-gray-lightest);
+
+	/****************************** Custom Variables ******************************/
 	--primary-font-color: var(--color-gray-lightest);
 	--info-font-color: var(--color-gray-light);
-	--message-box-typing-user-color: var(--color-gray-light);
+	--message-box-background: hsla(0, 0, 100%, 0.1);
 
+	--button-outline-color: var(--color-gray-medium);
+	--button-close-color: var(--color-gray-medium);
+
+
+	/********************** Overridden Rocket.Chat Variables **********************/
+
+	/* General Colors */
+	--rc-color-alert-message-warning-background: hsl(352, 83%, 20%);
 	--rc-color-primary: var(--color-gray-lightest);
 	--rc-color-primary-lightest: var(--color-dark-medium);
-	--rc-color-alert-message-warning-background: hsl(352, 83%, 20%);
 
+	/* Forms - Button */
+	--button-disabled-background: var(--color-dark-70);
+	--button-disabled-text-color: var(--color-dark-80);
+
+	/* Forms - Input */
 	--input-text-color: var(--color-gray-lightest);
 	--input-icon-color: var(--color-gray-lightest);
 
-	--mention-link-text-color: var(--color-light-blue);
-	--mention-link-background: var(--color-dark-medium);
+	/* Forms - popup list */
+	--popup-list-background: var(--color-dark);
+	--popup-list-background-hover: var(--color-darkest);
+	--popup-list-selected-background: var(--color-dark);
+	--popup-list-name-color: var(--color-white);
 
+	/* Forms - tags */
+	--tags-text-color: var(--color-white);
+	--tags-background: var(--color-blue);
+
+	/* Sidebar */
+	--sidebar-background: var(--color-dark);
+
+	/* Chip */
 	--chip-background: var(--color-blue);
+
+	/* Mention link */
+	--mention-link-background: var(--color-dark-medium);
+	--mention-link-text-color: var(--color-light-blue);
+	--mention-link-me-background: var(--alerts-background);
+	--mention-link-me-text-color: var(--color-white);
+	--mention-link-group-background: var(--alerts-background);
+	--mention-link-group-text-color: var(--color-white);
+
+	/* Message box */
+	--message-box-user-typing-color: var(--color-gray-lightest);
+	--message-box-user-typing-user-color: var(--color-gray-lightest);
+
+	/* Header */
+	--header-title-username-color-darker: var(--color-gray-lightest);
+	--header-background-color: var(--color-darkest);
+
+	/* Popover */
+	--popover-background: var(--color-dark);
+	--popover-title-color: var(--color-white);
+	--popover-item-color: var(--color-white);
+
+	/* Tooltip */
+	--tooltip-background: var(--color-darkest);
+	--tooltip-text-color: var(--color-white);
+
+	/* alert */
+	--alerts-background: #1d73f5;
+	--alerts-color: var(--color-white);
+
+	--message-box-editing-color: var(--rc-color-alert-message-warning-background);
+	--rc-color-alert: var(--color-dark-red);
 }
 
 
@@ -120,16 +183,32 @@ body.dark-mode a {
 	color: var(--color-light-blue);
 }
 
+body.dark-mode select {
+	background-color: var(--color-dark);
+}
+
+body.dark-mode select option {
+	color: var(--color-white);
+}
+
 body.dark-mode .sidebar-item > a {
 	color: inherit;
 }
 
-body.dark-mode .emoji-picker {
-	background-color: var(--rc-color-primary-dark);
+body.dark-mode .rc-switch__text {
+	color: var(--color-white);
 }
 
-body.dark-mode .emoji-picker .filter-item.active {
-	border-color: hsl(203, 73%, 52%);
+body.dark-mode .rc-switch-double {
+	color: var(--color-white);
+}
+
+body.dark-mode .rc-switch__button {
+	background-color: var(--color-dark);
+}
+
+body.dark-mode .error-border {
+	border-color: var(--color-dark-red);
 }
 
 body.dark-mode .background-component-color {
@@ -144,21 +223,8 @@ body.dark-mode .container-bars .color-primary-action-color {
 	color: var(--color-white);
 }
 
-body.dark-mode .rc-old .rc-message-box .reply-preview {
-	background-color: var(--color-dark);
-}
-
-body.dark-mode .rc-switch__text {
-	color: var(--color-white);
-}
-
 body.dark-mode .burger i {
 	background-color: var(--color-white);
-}
-
-body.dark-mode .message-actions,
-body.dark-mode .rc-member-list__counter {
-	color: var(--color-gray);
 }
 
 body.dark-mode .rc-member-list__user.active,
@@ -174,17 +240,13 @@ body.dark-mode p.rc-user-info-details__info {
 	color: var(--color-white);
 }
 
-body.dark-mode select option {
-	color: var(--color-dark);
-}
-
-body.dark-mode .error-border {
-	border-color: var(--color-dark-red);
-}
-
 body.dark-mode .messages-container .footer,
 body.dark-mode .content-background-color {
 	background-color: var(--header-background-color);
+}
+
+body.dark-mode .message {
+    background-color: var(--color-darkest);
 }
 
 body.dark-mode .message.new-day::after,
@@ -193,25 +255,53 @@ body.dark-mode .border-component-color {
 	border-color: var(--rc-color-primary-lightest);
 }
 
-body.dark-mode .js-button[aria-label="Toggle Dark Mode"] {
-	filter: brightness(130%);
-}
-
 body.dark-mode .message .reactions>li,
 body.dark-mode .message .title .is-bot,
 body.dark-mode .message .title .role-tag,
 body.dark-mode .message.new-day::before {
-	background-color: hsl(219, 15%, 33%);
+	background-color: var(--rc-color-primary-dark);
+}
+
+body.dark-mode .message.active,
+body.dark-mode .message:hover {
+    background-color: var(--color-darker);
+}
+
+body.dark-mode .message.editing {
+	background-color: var(--color-dark-blue);
+}
+
+body.dark-mode .message.first-unread .body:after {
+	background-color: var(--header-background-color);
 }
 
 body.dark-mode .rc-message-box__container {
-	background-color: hsla(0, 0, 100%, 0.1);
+	background-color: var(--message-box-background);
 }
 
-body.dark-mode .rc-message-box__typing,
-body.dark-mode .rc-message-box__typing-user {
-	color: var(--color-gray-lightest);
+body.dark-mode .rc-old .rc-message-box .reply-preview {
+	background-color: var(--color-dark);
 }
+
+body.dark-mode .message-actions,
+body.dark-mode .rc-member-list__counter {
+	color: var(--color-gray-light);
+	background-color: var(--color-darkest);
+	border-color: var(--color-dark);
+}
+
+body.dark-mode .message-actions__button:hover,
+body.dark-mode .message-actions__menu:hover {
+	background-color: var(--color-dark);
+}
+
+body.dark-mode .background-transparent-darker-before::before {
+	background-color: var(--color-dark-medium);
+}
+
+/*body.dark-mode .background-info-font-color {
+	background-color: var(--color-dark-medium);
+}*/
 
 body.dark-mode .rc-modal,
 body.dark-mode .rc-modal__footer {
@@ -223,66 +313,69 @@ body.dark-mode .rc-modal__header {
 	color: var(--color-white);
 }
 
-body.dark-mode .rc-button {
-	border-color: var(--color-gray-medium);
-	color: var(--color-gray-medium);
+body.dark-mode .rc-button--outline {
+	border-color: var(--button-outline-color);
+	color: var(--button-outline-color);
 }
 
-body.dark-mode .rc-button:disabled {
-	border-color: var(--color-darkest);
-	color: var(--color-dark-70);
-	background-color: var(--color-dark-80);
+body.dark-mode .rc-button--outline.js-close,
+body.dark-mode .rc-button--nude.js-close {
+	border-color: var(--button-close-color);
+	color: var(--button-close-color);
 }
 
-/* Ensure that colors still come through on buttons in dark mode */
-body.dark-mode .rc-button--cancel.rc-button--outline {
-	color: #f5455c;
-	color: var(--button-cancel-color);
-	border-color: #f5455c;
+body.dark-mode .rc-button--cancel,
+body.dark-mode .rc-button--danger {
+	background-color: var(--button-cancel-color);
 	border-color: var(--button-cancel-color);
-}
-
-body.dark-mode .rc-button.rc-button--nude.js-close {
-	border: var(--button-border-width) solid var(--color-gray-medium);
+	color: var(--button-primary-text-color);
 }
 
 body.dark-mode .contextual-bar {
 	background-color: var(--color-dark);
-  	border-left: 2px solid var(--color-dark-medium);
+	border-left: 2px solid var(--color-dark-medium);
 }
 
 body.dark-mode .contextual-bar__header {
 	background-color: var(--color-dark);
-  	border-bottom: 1px solid var(--color-dark-medium);
+	border-bottom: 1px solid var(--color-dark-medium);
 }
 
 body.dark-mode .contextual-bar__content {
 	background-color: var(--color-dark);
 }
 
-body.dark-mode .message.editing {
-	background-color: var(--color-dark-blue);
+/***** Chat file list *****/
+
+body.dark-mode .attachments__item:hover, .attachments__item:active {
+	background-color: var(--color-darkest);
 }
+
+body.dark-mode .attachments__content:hover, .attachments__content:active {
+	color: var(--primary-font-color);
+}
+
+body.dark-mode .attachments__name {
+	color: var(--color-blue);
+}
+
+body.dark-mode .attachments__name:hover, .attachments__name:active {
+	color: var(--color-light-blue);
+}
+
+/*****/
 
 body.dark-mode .rc-popover__content {
-	background-color: var(--popover-item-color);
+	background-color: var(--popover-background);
 	box-shadow: 0px 0px 2px var(--color-dark-20);
-
 }
 
-body.dark-mode .rc-popover__item-text,
-body.dark-mode .rc-popover__icon,
-body.dark-mode .rc-popover__title{
-	color: var(--popover-background);
+body.dark-mode .emoji-picker .filter-item.active {
+	border-color: var(--color-light-blue);
 }
 
 body.dark-mode .rc-header--room {
-	box-shadow: 0px 0px 3px var(--color-dark-medium);
-}
-
-body.dark-mode .rc-form-legend,
-body.dark-mode .rc-form-label {
-	color: var(--rc-color-primary-light);
+	border-bottom: 2px solid var(--color-dark-medium);
 }
 
 body.dark-mode .room-leader:hover {
@@ -293,10 +386,14 @@ body.dark-mode .chat-now {
 	color: var(--color-white);
 }
 
+body.dark-mode .message-popup-title {
+	background-color: var(--color-dark);
+}
 
 /**************Code Highlights*****************/
 
-body.dark-mode .code-colors {
+body.dark-mode .code-colors,
+body.dark-mode .rc-old code.inline {
 	background: var(--color-dark-100);
 	color: var(--color-gray-light);
 }
@@ -338,7 +435,24 @@ body.dark-mode .hljs-number {
 	color: var(--color-orange);
 }
 
+body.dark-mode .hljs-addition {
+  background-color: #1e3a21;
+}
+body.dark-mode .hljs-deletion {
+  background-color: #472d2e;
+}
 
+/***** My Account *****/
+
+body.dark-mode .rc-form-legend,
+body.dark-mode .rc-form-label {
+	color: var(--primary-font-color);
+}
+
+body.dark-mode .js-logout {
+	color: var(--primary-font-color);
+	border-color: var(--primary-font-color);
+}
 
 /**************Admin Panel******************/
 
@@ -362,6 +476,24 @@ body.dark-mode .rcx-field__label{
 
 body.dark-mode .sidebar-flex__search .rc-input__element {
 	color: var(--color-dark);
+}
+
+body.dark-mode .rcx-input-box__wrapper {
+	background-color: var(--color-dark);
+}
+
+body.dark-mode .rcx-box * .rcx-input-box {
+	background-color: var(--color-dark);
+}
+
+body.dark-mode .rcx-table__cell {
+	color: var(--color-gray);
+	background-color: var(--color-dark);
+}
+
+body.dark-mode  .rcx-table__cell--align-end {
+	color: var(--color-gray);
+	background-color: var(--color-gray);
 }
 
 body.dark-mode .rc-input__element:disabled{
@@ -389,10 +521,163 @@ body.dark-mode .rcx-accordion-item__bar:hover {
 }
 
 body.dark-mode .rcx-box--text-style-h1,
-body.dark-mode .rcx-subtitle {
+body.dark-mode .rcx-subtitle,
+body.dark-mode .rcx-box--text-color-default,
+body.dark-mode .rcx-box--text-color-info {
+	color: var(--color-gray-lightest);
+}
+
+body.dark-mode .rcx-table__cell {
 	color: var(--color-gray-lightest);
 }
 
 body.dark-mode .rcx-button--primary:disabled {
 	color: var(--color-gray);
+}
+
+body.dark-mode .permissions-manager .permission-grid .role-name {
+	background: var(--color-dark);
+}
+
+body.dark-mode .rc-apps-marketplace .rc-table-content tbody .rc-table-tr:not(.table-no-click):not(.table-no-pointer):hover,
+body.dark-mode .rc-apps-section .rc-table-content tbody .rc-table-tr:not(.table-no-click):not(.table-no-pointer):hover {
+	background-color: var(--color-dark);
+}
+
+body.dark-mode .rc-apps-marketplace .rc-table-content .rc-table-info .rc-apps-categories .rc-apps-category,
+body.dark-mode .rc-apps-section .rc-table-content .rc-table-info .rc-apps-categories .rc-apps-category {
+	color: var(--primary-font-color);
+	background-color: var(--color-dark-medium);
+}
+
+/*body.dark-mode .rcx-box * .rcx-input-box,*/
+body.dark-mode .rcx-box * .rcx-select {
+	/*color: var(--color-dark-medium);*/
+	background-color: var(--color-white);
+}
+
+body.dark-mode .mail-messages__instructions {
+	background-color: var(--color-dark);
+}
+
+body.dark-mode .rcx-tag--secondary {
+	background-color: var(--color-dark-medium);
+}
+
+body.dark-mode .rcx-table__cell--align-end {
+    color: var(--info-font-color) !important;
+	background-color: var(--color-dark-medium) !important;
+}
+
+body.dark-mode .rcx-box {
+    color: var(--info-font-color) !important;
+	background-color: var(--color-dark) !important;
+}
+
+body.dark-mode .rcx-modal__backdrop {
+	background-color: transparent !important;
+}
+
+body.dark-mode .rcx-table__cell--align-start {
+    color: var(--info-font-color) !important;
+	background-color: var(--color-dark-medium) !important;
+}
+
+body.dark-mode .rcx-button {
+	background-color: var(--color-dark-medium)
+}
+
+body.dark-mode .rcx-button--primary {
+	color: var(--info-font-color);
+	background-color: #095ad2
+}
+
+body.dark-mode  .rcx-field__description code {
+	background-color: var(--color-dark);
+}
+
+body.dark-mode .table-fake-th {
+	color: var(--info-font-color);
+}
+
+body.dark-mode .rc-input__element {
+	background-color: var(--color-dark-medium);
+	color: var(--info-font-color) !important;
+}
+
+body.dark-mode .rcx-check-box.is-focused,
+body.dark-mode .rcx-check-box__input:checked+.rcx-check-box__fake,
+body.dark-mode .rcx-check-box.is-focused,
+body.dark-mode .rcx-check-box__input:indeterminate+.rcx-check-box__fake,
+body.dark-mode .rcx-check-box__input:checked:focus+.rcx-check-box__fake,
+body.dark-mode .rcx-check-box__input:indeterminate:focus+.rcx-check-box__fake,
+body.dark-mode .rcx-radio-button.is-focused
+body.dark-mode .rcx-radio-button__input:checked+.rcx-radio-button__fake,
+body.dark-mode .rcx-radio-button__input:checked:focus+.rcx-radio-button__fake,
+body.dark-mode .rcx-toggle-switch.is-focused
+body.dark-mode .rcx-toggle-switch__input:checked+.rcx-toggle-switch__fake,
+body.dark-mode .rcx-toggle-switch__input:checked:focus+.rcx-toggle-switch__fake {
+	background-color: #1d74f5 !important;
+}
+
+body.dark-mode .CodeMirror {
+	background-color: var(--color-gray-light);
+}
+
+body.dark-mode .CodeMirror-gutter {
+	background-color: var(--color-dark);
+}
+
+body.dark-mode .setting-action {
+	border: var(--button-border-width) solid var(--info-font-color);
+	color: var(--info-font-color);
+}
+
+
+/**************Login Page******************/
+
+body.dark-mode main#rocket-chat {
+	background-color: var(--color-dark);
+}
+
+body.dark-mode section.full-page.color-tertiary-font-color {
+	background-color: var(--color-dark);
+}
+
+body.dark-mode .rc-button.rc-button--nude.forgot-password,
+body.dark-mode .rc-button.rc-button--nude.back-to-login,
+body.dark-mode .rc-button.rc-button--nude.register,
+body.dark-mode .rc-button.rc-button--nude i.icon-cancel,
+body.dark-mode .register-link-replacement {
+	color: var(--color-white);
+}
+
+body.dark-mode #login-card {
+	background-color: var(--color-darkest);
+}
+
+
+/**************Scrollbars******************/
+body.dark-mode *::-webkit-scrollbar {
+	background-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode *::-webkit-scrollbar-thumb {
+	background-color: rgba(255, 255, 255, 0.15);
+}
+
+body.dark-mode *::-webkit-scrollbar-corner {
+	background-color: rgba(255, 255, 255, 0.05);
+}
+
+/***** Poll App *****/
+body.dark-mode .rc-modal-wrapper > dialog > div {
+	background-color: var(--header-background-color);
+}
+
+body.dark-mode .rcx-box--text-style-h1, 
+body.dark-mode .rcx-subtitle, 
+body.dark-mode .rcx-box--text-color-default, 
+body.dark-mode .rcx-box--text-color-info {
+    color: var(--color-dark);
 }

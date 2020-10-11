@@ -14,7 +14,23 @@ const lightModeSymbol = `<svg id="icon-darkmode" viewBox="0 0 302.4 302.4" fill=
   <path d="m80.4,221.60001c-3.6,-4 -10.4,-4 -14.4,0l-22,22c-4,4 -4,10.40001 0,14.39999s10.4,4 14.4,0l22,-21.99998c4,-4.00002 4,-10.40001 0,-14.40001z"/>
   <path d="m80.4,66.4l-22,-22c-4,-4 -10.4,-4 -14.4,0s-4,10.4 0,14.4l22,22c4,4 10.4,4 14.4,0s4,-10.4 0,-14.4z"/>
 </svg>`; // sun icon
-const toggleButton = '<button class="sidebar__toolbar-button rc-tooltip rc-tooltip--down js-button" aria-label="Toggle Dark Mode">D</button>';
+
+const darkModeToggleText = {
+	'en': 'Toggle Dark Mode',
+	'de': 'Dark Mode umschalten',
+	'fr': 'Toggle Dark Mode',
+	'es': 'Toggle Dark Mode',
+	'hu': 'Sötét mód be/ki',
+	'it': 'Toggle Dark Mode',
+	'nl': 'Toggle Dark Mode',
+	'pl': 'Toggle Dark Mode',
+	'pt': 'Alternar Tema',
+	'ru': 'Смена оформления',
+	'he': 'מצב לילה',
+	'hi': 'डार्क मोड'
+}[defaultUserLanguage()] || 'Toggle Dark Mode';
+
+const toggleButton = `<button class="sidebar__toolbar-button rc-tooltip rc-tooltip--down js-button" aria-label="${darkModeToggleText}">D</button>`;
 
 function isDarkModeSet() {
 	return localStorage.getItem('dark-mode') === 'true';
@@ -43,7 +59,7 @@ function addDarkModeToggle() {
 		return;
 	}
 
-	var darkModeButton = $('.js-button[aria-label="Toggle Dark Mode"]');
+	var darkModeButton = $(`.js-button[aria-label="${darkModeToggleText}"]`);
 
 	// do nothing if button is already on the screen
 	if (darkModeButton.is(':visible')) {
@@ -56,6 +72,7 @@ function addDarkModeToggle() {
 	darkModeButton.on('click', function() {
 		toggleDarkMode();
 		darkModeButton.html(getDarkModeIcon());
+		$(this).blur();
 	});
 }
 
